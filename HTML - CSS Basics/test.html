@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriDoc - Crop Detection & Insights</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            background-image: url('../class/images/4.jpg');
+            background-size: cover;
+            background-position: center;
+            overflow-y: auto;
+        }
+        header {
+            width: 100%;
+            background-color: rgba(0, 128, 0, 0.8);
+            padding: 20px;
+            text-align: center;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 32px;
+            font-weight: 600;
+        }
+        header p {
+            margin: 5px 0;
+            font-size: 18px;
+            font-weight: 400;
+        }
+        .container {
+            margin-top: 160px;
+            width: 80%;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .intro {
+            font-size: 22px;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+        .crop-section {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .crop-container {
+            text-align: center;
+            margin: 10px;
+        }
+        .crop-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .crop-image:hover {
+            transform: scale(1.1);
+        }
+        .location-section {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .select-box {
+            margin: 0 10px;
+        }
+        footer {
+            width: 100%;
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-size: 16px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>AgriDoc - Crop Detection & Insights</h1>
+        <p>Your Guide to Staple Foods and Their Locations in Kenya</p>
+    </header>
+
+    <div class="container">
+        <h2>Explore Crop Locations</h2>
+        <p class="intro">Welcome to AgriDoc, a vital resource dedicated to promoting plant health and enhancing early detection of diseases. Understanding crop health is crucial for sustainable agriculture and food security, empowering farmers and stakeholders to make informed decisions for better yields.</p>
+
+        <!-- Crop Images Section -->
+        <div class="crop-section">
+            <div class="crop-container">
+                <img src="../class/images/corn.jpg" class="crop-image" alt="Corn" onclick="scrollToLocation()">
+                <p>Corn</p>
+            </div>
+            <div class="crop-container">
+                <img src="../class/images/rice.jpg" class="crop-image" alt="Rice" onclick="scrollToLocation()">
+                <p>Rice</p>
+            </div>
+            <div class="crop-container">
+                <img src="../class/images/wheat.jpg" class="crop-image" alt="Wheat" onclick="scrollToLocation()">
+                <p>Wheat</p>
+            </div>
+            <div class="crop-container">
+                <img src="../class/images/potato.jpg" class="crop-image" alt="Potato" onclick="scrollToLocation()">
+                <p>Potato</p>
+            </div>
+        </div>
+
+        <!-- Location Select Boxes Section -->
+        <div class="location-section" id="location-selection">
+            <div class="select-box">
+                <label for="county">County:</label>
+                <select id="county" onchange="populateConstituencies()">
+                    <option value="" selected disabled>Select County</option>
+                    <option value="Nairobi">Nairobi</option>
+                    <option value="Kiambu">Kiambu</option>
+                    <option value="Nakuru">Nakuru</option>
+                    <option value="Mombasa">Mombasa</option>
+                </select>
+            </div>
+            <div class="select-box">
+                <label for="constituency">Constituency:</label>
+                <select id="constituency" onchange="populateWards()" disabled>
+                    <option value="" selected disabled>Select Constituency</option>
+                </select>
+            </div>
+            <div class="select-box">
+                <label for="ward">Ward:</label>
+                <select id="ward" disabled>
+                    <option value="" selected disabled>Select Ward</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <footer id="footer">
+        <p>Safeguarding the Future with AgriDoc</p>
+    </footer>
+
+    <script>
+        // Scroll to location section on image click
+        function scrollToLocation() {
+            const locationSection = document.getElementById('location-selection');
+            locationSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Populate constituencies based on selected county
+        function populateConstituencies() {
+            const county = document.getElementById('county').value;
+            const constituencySelect = document.getElementById('constituency');
+            constituencySelect.innerHTML = '<option value="" selected disabled>Select Constituency</option>'; // Reset
+            constituencySelect.disabled = false;
+
+            let constituencies = [];
+
+            if (county === 'Nairobi') {
+                constituencies = ['Westlands', 'Kasarani', 'Embakasi South'];
+            } else if (county === 'Kiambu') {
+                constituencies = ['Thika Town', 'Kiambaa', 'Gatundu South'];
+            } else if (county === 'Nakuru') {
+                constituencies = ['Naivasha', 'Gilgil', 'Nakuru Town West'];
+            } else if (county === 'Mombasa') {
+                constituencies = ['Nyali', 'Likoni', 'Changamwe'];
+            }
+
+            constituencies.forEach(function(constituency) {
+                const option = document.createElement('option');
+                option.value = constituency;
+                option.textContent = constituency;
+                constituencySelect.appendChild(option);
+            });
+        }
+
+        // Populate wards based on selected constituency
+        function populateWards() {
+            const constituency = document.getElementById('constituency').value;
+            const wardSelect = document.getElementById('ward');
+            wardSelect.innerHTML = '<option value="" selected disabled>Select Ward</option>'; // Reset
+            wardSelect.disabled = false;
+
+            let wards = [];
+
+            if (constituency === 'Westlands') {
+                wards = ['Parklands', 'Karura', 'Kangemi'];
+            } else if (constituency === 'Kasarani') {
+                wards = ['Clay City', 'Mwiki', 'Kasarani'];
+            } else if (constituency === 'Naivasha') {
+                wards = ['Hellsgate', 'Mai Mahiu', 'Naivasha East'];
+            } else if (constituency === 'Nyali') {
+                wards = ['Frere Town', 'Ziwa la Ng\'ombe', 'Kongowea'];
+            }
+
+            wards.forEach(function(ward) {
+                const option = document.createElement('option');
+                option.value = ward;
+                option.textContent = ward;
+                wardSelect.appendChild(option);
+            });
+        }
+    </script>
+</body>
+</html>
